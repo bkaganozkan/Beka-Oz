@@ -5,8 +5,9 @@
 </template>
 
 <script>
-import MainScene from "./MainScene.js";
-import SceneObject from "./Objects/SceneObject";
+import MainScene from "@/_helpers/ThreeJS/MainScene";
+
+import Object3D, { Box, Plane } from "@/_helpers/ThreeJS/Objects";
 
 export default {
   name: "MainScene",
@@ -20,24 +21,25 @@ export default {
 
   created() {
     this.SceneComponents = new MainScene();
-
-    this.PhysicWorld = this.SceneComponents.GetPhysicWorld();
-
-    var ScenePlaneObject = new SceneObject("Plane", null, true).CreatePlane(
-      5,
-      5
-    );
-    this.PhysicWorld.addBody(ScenePlaneObject.userData.physicBody);
-
-    this.SceneComponents.AddObject(ScenePlaneObject);
   },
 
   mounted() {
     this.$nextTick(() => {
       this.SceneComponents.SetCanvas(this.$refs["main-scene-canvas"]);
-      var BoxObject = new SceneObject("Box_1", null, true).CreateBox();
-      this.PhysicWorld.addBody(BoxObject.userData.physicBody);
-      this.SceneComponents.AddObject(BoxObject);
+      var PlaneObject = new Plane(true);
+      var box = new Box(true);
+      var box1 = new Box(true);
+      var box2 = new Box(true);
+      box.setPosition(0, 2, 0);
+      box1.setPosition(2, 2, 0);
+      box2.setPosition(-2, 2, 0);
+
+      this.SceneComponents.AddObject(PlaneObject);
+      this.SceneComponents.AddObject(box);
+      this.SceneComponents.AddObject(box1);
+      this.SceneComponents.AddObject(box2);
+
+      // RUN Scene
       this.SceneComponents.RunScene();
 
       // Resize-Responsive Page
