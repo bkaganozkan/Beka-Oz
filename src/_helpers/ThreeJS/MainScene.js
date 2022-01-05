@@ -52,17 +52,15 @@ class MainScene {
     let object = MainScene.SceneObjects.filter(
       (object) => object.object == Sobject
     );
-    // let tempCol =  object[0].collusion;    
-    object[0].physicEnable = false
+    object[0].physicEnable = false;
   }
-  EnableCollusion(Sobject){
+  EnableCollusion(Sobject) {
     let object = MainScene.SceneObjects.filter(
       (object) => object.object == Sobject
     );
-    object[0].physicEnable = true
-    console.log(object);
+    object[0].setCollusion();
+    object[0].physicEnable = true;
   }
-
 
   SwitchOrbitDraggableControl() {
     this.SetOrbitControl(this.camera, this.renderer.domElement);
@@ -70,12 +68,11 @@ class MainScene {
 
     this.dragControl.addEventListener("dragstart", (event) => {
       this.DisableCollusion(event.object);
-      // console.log(event[0]);
       this.orbitControl.dispose();
     });
     this.dragControl.addEventListener("dragend", (event) => {
       this.SetOrbitControl(this.camera, this.renderer.domElement);
-      this.EnableCollusion(event.object)
+      this.EnableCollusion(event.object);
     });
   }
 
@@ -119,7 +116,7 @@ class MainScene {
       MainScene.SceneObjects.map((object) => {
         object.updateMeshCoordinate();
       });
-      this.cannonDebugRenderer.update();
+      // this.cannonDebugRenderer.update();
       this.render();
     };
 

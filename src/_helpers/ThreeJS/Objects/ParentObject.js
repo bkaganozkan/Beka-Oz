@@ -36,18 +36,27 @@ class Object3D {
           this.collusion.position.z
         )
       : null;
-    // this.physicEnable
-    //   ? this.object.quaternion.set(
-    //       this.collusion.quaternion.x,
-    //       this.collusion.quaternion.y,
-    //       this.collusion.quaternion.z
-    //     )
-    //   : null;
+    this.physicEnable
+      ? this.object.quaternion.set(
+          this.collusion.quaternion.x,
+          this.collusion.quaternion.y,
+          this.collusion.quaternion.z,
+          this.collusion.quaternion.w
+        )
+      : null;
   }
 
   setPosition(x, y, z) {
     this.object.position.set(x, y, z);
     this.collusionInit();
+  }
+
+  setCollusion() {
+    this.collusion.position = new Vec3(
+      this.object.position.x,
+      this.object.position.y,
+      this.object.position.z
+    );
   }
 }
 
