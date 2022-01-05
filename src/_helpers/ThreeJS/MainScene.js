@@ -48,24 +48,34 @@ class MainScene {
 
   // Controls
 
-  GetSelectedSceneObject(Sobject) {
+  DisableCollusion(Sobject) {
     let object = MainScene.SceneObjects.filter(
       (object) => object.object == Sobject
     );
+    // let tempCol =  object[0].collusion;    
+    object[0].physicEnable = false
+  }
+  EnableCollusion(Sobject){
+    let object = MainScene.SceneObjects.filter(
+      (object) => object.object == Sobject
+    );
+    object[0].physicEnable = true
     console.log(object);
   }
+
 
   SwitchOrbitDraggableControl() {
     this.SetOrbitControl(this.camera, this.renderer.domElement);
     this.SetDragControl(this.camera, this.renderer.domElement);
 
     this.dragControl.addEventListener("dragstart", (event) => {
-      this.GetSelectedSceneObject(event.object);
-      console.log(event);
+      this.DisableCollusion(event.object);
+      // console.log(event[0]);
       this.orbitControl.dispose();
     });
-    this.dragControl.addEventListener("dragend", () => {
+    this.dragControl.addEventListener("dragend", (event) => {
       this.SetOrbitControl(this.camera, this.renderer.domElement);
+      this.EnableCollusion(event.object)
     });
   }
 

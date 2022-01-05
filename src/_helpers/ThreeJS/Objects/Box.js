@@ -12,7 +12,7 @@ class Box extends Object3D {
     // Enable Physics by CANNON
     if (this.physicEnable) {
       const boxShape = new CANNON.Box(
-        new CANNON.Vec3(size_x / 2, size_y / 1, size_z / 1)
+        new CANNON.Vec3(size_x / 2, size_y / 2, size_z / 2)
       );
       const boxBody = new CANNON.Body({ mass: 1 });
       boxBody.addShape(boxShape);
