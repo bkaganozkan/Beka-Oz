@@ -4,19 +4,21 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { DragControls } from "three/examples/jsm/controls/DragControls";
 import * as CANNON from "cannon-es";
 import CannonDebugger from "cannon-es-debugger";
-// import ParentObject from "@/_helpers/ThreeJS/ParentObject";
+import ParentObject from "./Objects/ParentObject";
 
 class MainScene {
   static SceneObjects = [];
   static DraggableObjects = [];
   static delta;
+  static camera;
   // static PhysicWorld = null
   constructor() {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x808080);
-    this.camera;
-    this.renderer;
+
     this.orbitControl;
+    this.renderer;
+
     this.dragControl;
     this.clock = new THREE.Clock();
 
@@ -48,31 +50,28 @@ class MainScene {
 
   // Controls
 
-  DisableCollusion(Sobject) {
+  GetObjectByMesh(Sobject) {
     let object = MainScene.SceneObjects.filter(
-      (object) => object.object == Sobject
-    );
-    object[0].physicEnable = false;
+      (object) => object.object === Sobject
+    )[0];
+    return object;
   }
-  EnableCollusion(Sobject) {
-    let object = MainScene.SceneObjects.filter(
-      (object) => object.object == Sobject
-    );
-    object[0].setCollusion();
-    object[0].physicEnable = true;
-  }
+
+  // ############################### CAMERA CONTROL ##########################
 
   SwitchOrbitDraggableControl() {
     this.SetOrbitControl(this.camera, this.renderer.domElement);
     this.SetDragControl(this.camera, this.renderer.domElement);
 
     this.dragControl.addEventListener("dragstart", (event) => {
-      this.DisableCollusion(event.object);
+      let Pobject = this.GetObjectByMesh(event.object);
+      Pobject.DisableCollusion();
       this.orbitControl.dispose();
     });
     this.dragControl.addEventListener("dragend", (event) => {
       this.SetOrbitControl(this.camera, this.renderer.domElement);
-      this.EnableCollusion(event.object);
+      let Pobject = this.GetObjectByMesh(event.object);
+      Pobject.EnableCollusion();
     });
   }
 
@@ -85,7 +84,6 @@ class MainScene {
       (dragObject) => dragObject.object
     );
     this.dragControl = new DragControls(DraggableObjects, camera, domElement);
-    // console.log(MainScene.DraggableObjects);
   }
 
   // #######################################################################################
@@ -99,6 +97,18 @@ class MainScene {
 
   render() {
     this.renderer.render(this.scene, this.camera);
+
+    let transform = ParentObject.TransformObject();
+    transform.raycaster.setFromCamera(transform.mouse, this.camera);
+
+    // calculate objects intersecting the picking ray
+    const intersects = transform.raycaster.intersectObjects(
+      this.scene.children
+    );
+
+    for (let i = 0; i < intersects.length; i++) {
+      intersects[i].object.material.color.set(0xff0000);
+    }
   }
 
   getDeltaTime() {

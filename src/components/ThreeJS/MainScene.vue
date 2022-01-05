@@ -36,8 +36,12 @@ export default {
 
       this.SceneComponents.AddObject(PlaneObject);
       this.SceneComponents.AddObject(box);
+      
+       box.MoveFunction();
+       
       this.SceneComponents.AddObject(box1);
       this.SceneComponents.AddObject(box2);
+
 
       // RUN Scene
       this.SceneComponents.RunScene();

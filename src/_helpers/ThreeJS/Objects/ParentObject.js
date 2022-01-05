@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
 import { Vec3 } from "cannon-es";
-// import MainScene from "@/components/ThreeJS/MainScene";
+import { TransformControls } from "three/examples/jsm/controls/TransformControls";
+import MainScene from "../MainScene";
 
 class Object3D {
   static SceneObjects = [];
@@ -9,7 +10,9 @@ class Object3D {
     physicEnable = false,
     collusion = null,
     object = null,
-    userData = {}
+    userData = {
+      tansformController: null,
+    }
   ) {
     this.object = object;
     this.physicEnable = physicEnable;
@@ -45,10 +48,17 @@ class Object3D {
         )
       : null;
   }
-
   setPosition(x, y, z) {
     this.object.position.set(x, y, z);
     this.collusionInit();
+  }
+
+  DisableCollusion() {
+    this.physicEnable = false;
+  }
+  EnableCollusion() {
+    this.setCollusion();
+    this.physicEnable = true;
   }
 
   setCollusion() {
@@ -58,18 +68,50 @@ class Object3D {
       this.object.position.z
     );
   }
-}
 
-// static MoveShape(name) {
-//   const selectedObject = MainScene.SceneObjects.filter(
-//     (object) => object.userData.info.name == name
-//   )[0];
-//   if (selectedObject) {
-//     selectedObject.position.x += 0.01;
-//     selectedObject.position.y += 0.01;
-//   } else {
-//     console.log("Obje Bulunmadı");
-//   }
-// }
+  // Move Function -- Ameteur #########################################
+  MoveFunction(forward = "KeyW", back = "KeyS", right = "KeyD", left = "KeyA") {
+    document.addEventListener("keypress", (event) => {
+      if (event.code === forward) {
+        (() => {
+          this.DisableCollusion();
+          this.object.position.z -= 0.1;
+          this.EnableCollusion();
+        })();
+      }
+      if (event.code === back) {
+        (() => {
+          this.DisableCollusion();
+          this.object.position.z += 0.1;
+          this.EnableCollusion();
+        })();
+      }
+      if (event.code === right) {
+        (() => {
+          this.DisableCollusion();
+          this.object.position.x += 0.1;
+          this.EnableCollusion();
+        })();
+      }
+      if (event.code === left) {
+        (() => {
+          this.DisableCollusion();
+          this.object.position.x -= 0.1;
+          this.EnableCollusion();
+        })();
+      }
+    });
+  }
+  static TransformObject() {
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    var v = (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    };
+
+    return { raycaster, mouse };
+  }
+}
 
 export default Object3D;
