@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@fortawesome/vue-fontawesome": "^2.0.6",
     "@types/three": "^0.135.0",
     "cannon": "^0.6.2",
     "cannon-es": "^0.18.0",

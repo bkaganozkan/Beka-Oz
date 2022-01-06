@@ -1,21 +1,30 @@
 <template>
   <div class="main-scene-container">
-    <canvas ref="main-scene-canvas" class="main-scene-canvas" />
+    <ModelSidebar :show="sceneSidebar" />
+    <div class="main-scene">
+      <canvas ref="main-scene-canvas" class="main-scene-canvas" />
+    </div>
   </div>
 </template>
-
 <script>
 import MainScene from "@/_helpers/ThreeJS/MainScene";
+import ModelSidebar from "../Containers/ModelSidebar";
 
-import Object3D, { Box, Plane } from "@/_helpers/ThreeJS/Objects";
+import { Box, Plane } from "@/_helpers/ThreeJS/Objects";
 
 export default {
   name: "MainScene",
+  components: {
+    ModelSidebar,
+  },
   data() {
     return {
       SceneComponents: null,
       PhysicWorld: null,
       renderer: null,
+
+      // Model Sidebar show
+      sceneSidebar: false,
     };
   },
 
@@ -36,12 +45,11 @@ export default {
 
       this.SceneComponents.AddObject(PlaneObject);
       this.SceneComponents.AddObject(box);
-      
-       box.MoveFunction();
-       
+
+      box.MoveFunction();
+
       this.SceneComponents.AddObject(box1);
       this.SceneComponents.AddObject(box2);
-
 
       // RUN Scene
       this.SceneComponents.RunScene();
@@ -60,16 +68,34 @@ export default {
       window.addEventListener("resize", onWindowResize, false);
     });
   },
+
+
+  methods:{
+    
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .main-scene-container {
-  width: 100vw;
-  height: 100vh;
+  display: flex;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
+  min-height: 75vh;
+  border: 3px solid red;
+  
+  // overflow-y: unset;
+}
+.main-scene {
+  position: relative;
+  width: -webkit-fill-available !important;
 }
 .main-scene-canvas {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100% !important;
+  height: 100% !important;
 }
 </style>

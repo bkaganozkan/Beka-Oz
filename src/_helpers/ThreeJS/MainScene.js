@@ -98,17 +98,17 @@ class MainScene {
   render() {
     this.renderer.render(this.scene, this.camera);
 
-    let transform = ParentObject.TransformObject();
-    transform.raycaster.setFromCamera(transform.mouse, this.camera);
+    // let transform = ParentObject.TransformObject();
+    // transform.raycaster.setFromCamera(transform.mouse, this.camera);
 
     // calculate objects intersecting the picking ray
-    const intersects = transform.raycaster.intersectObjects(
-      this.scene.children
-    );
+    // const intersects = transform.raycaster.intersectObjects(
+    //   this.scene.children
+    // );
 
-    for (let i = 0; i < intersects.length; i++) {
-      intersects[i].object.material.color.set(0xff0000);
-    }
+    // for (let i = 0; i < intersects.length; i++) {
+    //   intersects[i].object.material.color.set(0xff0000);
+    // }
   }
 
   getDeltaTime() {
